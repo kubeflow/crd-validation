@@ -44,6 +44,7 @@ func NewCustomResourceDefinition(name string) *apiextensions.CustomResourceDefin
 				Singular: names["singular"].(string),
 				Kind:     names["kind"].(string),
 			},
+			Scope: apiextensions.ResourceScope(spec["scope"].(string)),
 		},
 	}
 
