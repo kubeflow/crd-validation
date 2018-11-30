@@ -15,6 +15,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -48,11 +50,14 @@ var tfjobCmd = &cobra.Command{
 
 func generateTFJob() {
 	original := config.NewCustomResourceDefinition("tfjob")
-	var outputDir string
+	var outputDir, jobVersion string
 	if viper.Get("global") != nil {
-		outputDir = viper.Get("global").(map[string]interface{})["output"].(string)
+		outputDir = viper.GetString("global.output")
+		jobVersion = viper.GetString("tfjob.spec.version")
 	}
-	generator := crd.NewTFJobGenerator(outputDir)
+	filename := fmt.Sprintf("tfjob-crd-%v.yaml", jobVersion)
+
+	generator := crd.NewTFJobGenerator(jobVersion)
 	final := generator.Generate(original)
-	generator.Export(final)
+	generator.Export(final, outputDir, filename)
 }
