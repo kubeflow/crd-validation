@@ -13,21 +13,16 @@ import (
 
 // Exporter exports the yaml config to file.
 type Exporter struct {
-	outputDir string
-	filename  string
-	writer    *bufio.Writer
+	writer *bufio.Writer
 }
 
-func New(outputDir, filename string) *Exporter {
-	return &Exporter{
-		outputDir: outputDir,
-		filename:  filename,
-	}
+func New() *Exporter {
+	return &Exporter{}
 }
 
 // Export exports the yaml config to file.
-func (e *Exporter) Export(final *apiextensions.CustomResourceDefinition) {
-	file, err := filepath.Abs(filepath.Join(e.outputDir, e.filename))
+func (e *Exporter) Export(final *apiextensions.CustomResourceDefinition, outputDir string, filename string) {
+	file, err := filepath.Abs(filepath.Join(outputDir, filename))
 	if err != nil {
 		log.Fatalf("Failed to open the output file %s: %v", file, err)
 	}
