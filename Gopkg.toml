@@ -18,19 +18,9 @@
   version = "kubernetes-1.13.10"
   name = "k8s.io/apiextensions-apiserver"
 
-[[constraint]]
-  name = "github.com/lyft/flytepropeller"
-  branch = "openapi-def"
-
 [[override]]
   name = "k8s.io/go-client"
   version = "kubernetes-1.13.10"
-
-
-[[override]]
-  name = "github.com/lyft/flytestdlib"
-  version = "v0.2.16"
-  source = "git@github.com:lyft/flytestdlib.git"
 
 [[override]]
   branch = "master"
