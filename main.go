@@ -17,7 +17,7 @@ package main
 import (
 	"os"
 
-	"github.com/kubeflow/crd-validation/cmd"
+	"github.com/bnsblue/crd-validation/cmd"
 	log "github.com/sirupsen/logrus"
 )
 

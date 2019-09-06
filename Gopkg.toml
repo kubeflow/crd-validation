@@ -25,3 +25,7 @@
 [[override]]
   branch = "master"
   name = "golang.org/x/net"
+
+[[constraint]]
+  branch = "openapi-def"
+  name = "github.com/lyft/flytepropeller"
