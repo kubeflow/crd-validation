@@ -43,15 +43,12 @@ func (e *Exporter) Export(final *apiextensions.CustomResourceDefinition) {
 }
 
 func (e Exporter) marshallCrd(crd *apiextensions.CustomResourceDefinition, outputFormat string) {
-	//testCrdObj := apiextensions.CustomResourceDefinition{}
-	//fmt.Println(testCrdObj)
-	//jsonBytes, err := json.MarshalIndent(testCrdObj, "", "    ")
 	jsonBytes, err := json.MarshalIndent(crd, "", "    ")
 	if err != nil {
 		log.Fatal("error:", err)
 	}
 
-	// Hack: doing this because the status section should not exist in the CRD yaml, but because the type definition of
+	// Doing the following because the status section should not exist in the CRD yaml, but because the type definition of
 	// CustomResourceDefinition, the field Status is a struct, which omitempty does not apply properly to, the status
 	// section will still be generated when we marshal the CRD object to the yaml. What we are doing here is we take
 	// an extra step, unmarshaling the jsonBytes to a map[string]interface{}, and delete the key "status" from the map,
@@ -75,28 +72,4 @@ func (e Exporter) marshallCrd(crd *apiextensions.CustomResourceDefinition, outpu
 		e.writer.WriteString("---\n")
 		e.writer.Write(yamlBytes)
 	}
-	/*
-	var redactedMap map[string]interface{}
-	err = json.Unmarshal(jsonBytes, &redactedMap)
-	if err != nil {
-		log.Fatal("error:", err)
-	}
-	delete(redactedMap, "status")
-	for field, val := range redactedMap {
-		fmt.Println("KV pair: ", field, val)
-	}
-	redactedJsonBytes, err := json.MarshalIndent(redactedMap, "", "    ")
-
-	if outputFormat == "json" {
-		e.writer.Write(redactedJsonBytes)
-	} else {
-		yamlBytes, err := yaml.JSONToYAML(redactedJsonBytes)
-		if err != nil {
-			log.Fatal("error:", err)
-		}
-		e.writer.WriteString("---\n")
-		e.writer.Write(yamlBytes)
-	}
-
-	*/
 }
