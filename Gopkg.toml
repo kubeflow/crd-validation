@@ -1,32 +1,37 @@
 [[constraint]]
-  source = "https://github.com/gaocegege/k8s.git"
-  name = "github.com/kubeflow/tf-operator"
-  revision = "bf6199c51cc9b47f8a726947b5fac82432fcde83"
-
-[[constraint]]
   name = "github.com/ghodss/yaml"
   version = "1.0.0"
-
-[[constraint]]
-  name = "github.com/spf13/cobra"
-  version = "0.0.3"
 
 [[constraint]]
   name = "github.com/spf13/viper"
   version = "1.0.2"
 
-[[constraint]]
-  branch = "release-1.8"
+[[override]]
+  name = "k8s.io/apimachinery"
+  version = "kubernetes-1.13.10"
+
+[[override]]
+  version = "kubernetes-1.13.10"
   name = "k8s.io/api"
 
 [[constraint]]
-  branch = "release-1.8"
+  version = "kubernetes-1.13.10"
   name = "k8s.io/apiextensions-apiserver"
 
 [[constraint]]
-  branch = "release-1.8"
-  name = "k8s.io/apimachinery"
+  name = "github.com/lyft/flytepropeller"
+  branch = "openapi-def"
 
-[[constraint]]
-  branch = "release-1.8"
-  name = "k8s.io/kube-openapi"
+[[override]]
+  name = "k8s.io/go-client"
+  version = "kubernetes-1.13.10"
+
+
+[[override]]
+  name = "github.com/lyft/flytestdlib"
+  version = "v0.2.16"
+  source = "git@github.com:lyft/flytestdlib.git"
+
+[[override]]
+  branch = "master"
+  name = "golang.org/x/net"

@@ -2,11 +2,14 @@ package utils
 
 import (
 	"fmt"
+	"k8s.io/apimachinery/pkg/util/sets"
 
 	spec "github.com/go-openapi/spec"
 	extensionsobj "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	common "k8s.io/kube-openapi/pkg/common"
 )
+
+var visitedRefStringSet = sets.String{}
 
 // SchemaPropsToJSONPropsArray converts []Schema to []JSONSchemaProps
 func SchemaPropsToJSONPropsArray(schemas []spec.Schema, openapiSpec map[string]common.OpenAPIDefinition, nested bool) []extensionsobj.JSONSchemaProps {
@@ -79,14 +82,16 @@ func SchemaPropsToJSONProps(schema *spec.Schema, openapiSpec map[string]common.O
 	schemaProps := &schema.SchemaProps
 
 	var ref *string
-	if schemaProps.Ref.String() != "" {
+
+	if refString := schemaProps.Ref.String(); refString != "" && !visitedRefStringSet.Has(refString) {
+		visitedRefStringSet.Insert(refString)
 		if nested {
-			propref := openapiSpec[schemaProps.Ref.String()].Schema
+			propref := openapiSpec[refString].Schema
 			// If nested just return a pointer to the reference
 			return SchemaPropsToJSONProps(&propref, openapiSpec, nested)
 		}
 		ref = new(string)
-		*ref = schemaProps.Ref.String()
+		*ref = refString
 	}
 
 	props = &extensionsobj.JSONSchemaProps{
@@ -123,5 +128,6 @@ func SchemaPropsToJSONProps(schema *spec.Schema, openapiSpec map[string]common.O
 		PatternProperties:    SchemPropsMapToJSONMap(schemaProps.PatternProperties, openapiSpec, nested),
 		AdditionalItems:      SchemaOrBoolToJSONProps(schemaProps.AdditionalItems, openapiSpec, nested),
 	}
+
 	return props
 }

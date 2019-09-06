@@ -15,38 +15,43 @@
 package config
 
 import (
+	"github.com/ghodss/yaml"
 	"github.com/spf13/viper"
+
+	"io/ioutil"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"log"
+	"os"
 )
 
+type CrdValidationConfig struct {
+	OutputDir string
+}
+
+func GetCrdValidationConfig() *CrdValidationConfig {
+	var newConfig CrdValidationConfig
+	if viper.Get("global") != nil {
+		newConfig.OutputDir = viper.Get("global").(map[string]interface{})["output"].(string)
+	}
+	return &newConfig
+}
+
 // NewCustomResourceDefinition creates a new CRD from the config for the given name.
-func NewCustomResourceDefinition(name string) *apiextensions.CustomResourceDefinition {
-	crdConfig := viper.Get(name).(map[string]interface{})
-	metadata := crdConfig["metadata"].(map[string]interface{})
-	spec := crdConfig["spec"].(map[string]interface{})
-	names := spec["names"].(map[string]interface{})
-	crd := &apiextensions.CustomResourceDefinition{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: metadata["name"].(string),
-			// Labels: metadata["labels"].(map[string]string),
-			// Annotations: ,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       crdConfig["kind"].(string),
-			APIVersion: crdConfig["apiversion"].(string),
-		},
-		Spec: apiextensions.CustomResourceDefinitionSpec{
-			Group:   spec["group"].(string),
-			Version: spec["version"].(string),
-			Names: apiextensions.CustomResourceDefinitionNames{
-				Plural:   names["plural"].(string),
-				Singular: names["singular"].(string),
-				Kind:     names["kind"].(string),
-			},
-			Scope: apiextensions.ResourceScope(spec["scope"].(string)),
-		},
+func NewCustomResourceDefinition(baseCrdFile string) *apiextensions.CustomResourceDefinition {
+	log.Printf("Reading base CRD from %v\n", baseCrdFile)
+	data, err := ioutil.ReadFile(baseCrdFile)
+	var baseCrdObj apiextensions.CustomResourceDefinition
+
+	if err != nil {
+		log.Println(err)
+		os.Exit(-1)
 	}
 
-	return crd
+	err = yaml.Unmarshal([]byte(data), &baseCrdObj)
+	if err != nil {
+		log.Println(err)
+		os.Exit(-1)
+	}
+
+	return &baseCrdObj
 }
