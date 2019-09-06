@@ -5,8 +5,8 @@ import (
 	"github.com/lyft/flytepropeller/pkg/apis/flyteworkflow/v1alpha1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 
-	"github.com/lyft/flytepropeller/pkg/crd-validation/pkg/crd/exporter"
-	"github.com/lyft/flytepropeller/pkg/crd-validation/pkg/utils"
+	"github.com/kubeflow/crd-validation/pkg/crd/exporter"
+	"github.com/kubeflow/crd-validation/pkg/utils"
 )
 
 const (

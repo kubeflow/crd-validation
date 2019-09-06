@@ -3,6 +3,10 @@
   version = "1.0.0"
 
 [[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
+
+[[constraint]]
   name = "github.com/spf13/viper"
   version = "1.0.2"
 
@@ -18,14 +22,20 @@
   version = "kubernetes-1.13.10"
   name = "k8s.io/apiextensions-apiserver"
 
+[[constraint]]
+  name = "github.com/lyft/flytepropeller"
+  branch = "openapi-def"
+
 [[override]]
   name = "k8s.io/go-client"
   version = "kubernetes-1.13.10"
 
+
+[[override]]
+  name = "github.com/lyft/flytestdlib"
+  version = "v0.2.16"
+  source = "git@github.com:lyft/flytestdlib.git"
+
 [[override]]
   branch = "master"
   name = "golang.org/x/net"
-
-[[constraint]]
-  branch = "openapi-def"
-  name = "github.com/lyft/flytepropeller"
