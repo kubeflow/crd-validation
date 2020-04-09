@@ -1,7 +1,8 @@
 package crd
 
 import (
-	tfv1alpha2 "github.com/kubeflow/tf-operator/pkg/apis/tensorflow/v1alpha2"
+	commonv1 "github.com/kubeflow/common/job_controller/api/v1"
+	tfv1 "github.com/kubeflow/tf-operator/pkg/apis/tensorflow/v1"
 	log "github.com/sirupsen/logrus"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 
@@ -11,9 +12,9 @@ import (
 
 const (
 	// CRDName is the name for TFJob.
-	CRDName = "github.com/kubeflow/tf-operator/pkg/apis/tensorflow/v1alpha2.TFJob"
+	CRDName = "github.com/kubeflow/tf-operator/pkg/apis/tensorflow/v1.TFJob"
 
-	generatedFile = "tfjob-crd-v1alpha2.yaml"
+	generatedFile = "tfjobv1-crd.yaml"
 )
 
 // TFJobGenerator is the type for TFJob CRD generator.
@@ -31,6 +32,6 @@ func NewTFJobGenerator(outputDir string) *TFJobGenerator {
 // Generate generates the crd.
 func (t TFJobGenerator) Generate(original *apiextensions.CustomResourceDefinition) *apiextensions.CustomResourceDefinition {
 	log.Println("Generating validation for TFJob")
-	original.Spec.Validation = utils.GetCustomResourceValidation(CRDName, tfv1alpha2.GetOpenAPIDefinitions)
+	original.Spec.Validation = utils.GetCustomResourceValidation(CRDName, []utils.GetAPIDefinitions{tfv1.GetOpenAPIDefinitions, commonv1.GetOpenAPIDefinitions})
 	return original
 }

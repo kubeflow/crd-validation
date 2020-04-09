@@ -9,15 +9,14 @@ This tool is built for [kubeflow][] community while it also works for other CRDs
 ### Clone
 
 ```bash
-git clone https://github.com/gaocegege/crd-validation
-mv ./crd-validation $GOPATH/src/github.com/kubeflow
-cd $GOPATH/src/github.com/kubeflow/crd-validation
+cd ${GOPATH}/src/github.com/kubeflow/
+git clone https://github.com/kubeflow/crd-validation
 ```
 
 ### Build
 
 ```bash
-go build .
+GO111MODULE=off go build .
 ```
 
 ### Run

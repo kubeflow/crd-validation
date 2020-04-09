@@ -26,6 +26,7 @@ func NewCustomResourceDefinition(name string) *apiextensions.CustomResourceDefin
 	metadata := crdConfig["metadata"].(map[string]interface{})
 	spec := crdConfig["spec"].(map[string]interface{})
 	names := spec["names"].(map[string]interface{})
+	preserveUnknownFields := false
 	crd := &apiextensions.CustomResourceDefinition{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: metadata["name"].(string),
@@ -44,7 +45,11 @@ func NewCustomResourceDefinition(name string) *apiextensions.CustomResourceDefin
 				Singular: names["singular"].(string),
 				Kind:     names["kind"].(string),
 			},
-			Scope: apiextensions.ResourceScope(spec["scope"].(string)),
+			Scope:                 apiextensions.ResourceScope(spec["scope"].(string)),
+			PreserveUnknownFields: &preserveUnknownFields,
+		},
+		Status: apiextensions.CustomResourceDefinitionStatus{
+			StoredVersions: []string{spec["version"].(string)},
 		},
 	}
 

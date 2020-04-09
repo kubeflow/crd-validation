@@ -36,9 +36,17 @@ func GetCustomResourceValidations(fn GetAPIDefinitions) map[string]*extensionsob
 }
 
 // GetCustomResourceValidation returns the validation definition for a CRD name
-func GetCustomResourceValidation(name string, fn func(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition) *extensionsobj.CustomResourceValidation {
-	openapiSpec := fn(OpenAPIRefCallBack)
-	fixKnownTypes(openapiSpec)
+func GetCustomResourceValidation(name string, fns []GetAPIDefinitions) *extensionsobj.CustomResourceValidation {
+	openapiSpec := map[string]common.OpenAPIDefinition{}
+	for _, fn := range fns {
+		fnspec := fn(OpenAPIRefCallBack)
+		fixKnownTypes(fnspec)
+		for k, v := range fnspec {
+			if _, ok := openapiSpec[k]; !ok {
+				openapiSpec[k] = v
+			}
+		}
+	}
 	schema := openapiSpec[name].Schema
 	return &extensionsobj.CustomResourceValidation{
 		OpenAPIV3Schema: SchemaPropsToJSONProps(&schema, openapiSpec, true),
@@ -50,18 +58,7 @@ func fixKnownTypes(openapiSpec map[string]common.OpenAPIDefinition) {
 	openapiSpec["k8s.io/apimachinery/pkg/util/intstr.IntOrString"] = common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				AnyOf: []spec.Schema{
-					{
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"string"},
-						},
-					},
-					{
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"integer"},
-						},
-					},
-				},
+				Type: []string{"string"},
 			},
 		},
 	}
