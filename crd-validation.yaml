@@ -7,7 +7,7 @@ tfjob:
     name: tfjobs.kubeflow.org
   spec:
     group: kubeflow.org
-    version: v1alpha2
+    version: v1
     scope: Namespaced
     names:
       kind: TFJob
