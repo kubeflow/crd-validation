@@ -12,7 +12,7 @@ spec:
     kind: TFJob
     plural: tfjobs
     singular: tfjob
-  preserveUnknownFields: true
+  preserveUnknownFields: false
   scope: Namespaced
   validation:
     openAPIV3Schema:

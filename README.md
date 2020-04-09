@@ -22,7 +22,7 @@ GO111MODULE=off go build .
 ### Run
 
 ```bash
-./crd-validation -c ./crd-validation.yaml tfjob
+./crd-validation -c ./examples/tfjob/crd-validation.yaml tfjob
 ```
 
 ## Acknowledgements
