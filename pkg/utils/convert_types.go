@@ -65,9 +65,6 @@ func SchemPropsMapToJSONMap(schemaMap map[string]spec.Schema, openapiSpec map[st
 	var m map[string]extensionsobj.JSONSchemaProps
 	m = make(map[string]extensionsobj.JSONSchemaProps)
 	for key, schema := range schemaMap {
-		if key == "metadata" {
-			continue
-		}
 		m[key] = *SchemaPropsToJSONProps(&schema, openapiSpec, nested)
 	}
 	return m
@@ -90,9 +87,6 @@ func SchemaPropsToJSONProps(schema *spec.Schema, openapiSpec map[string]common.O
 		}
 		ref = new(string)
 		*ref = schemaProps.Ref.String()
-	}
-	if schemaProps.Type == nil {
-		schemaProps.Type = []string{"object"}
 	}
 
 	props = &extensionsobj.JSONSchemaProps{

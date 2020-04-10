@@ -12,7 +12,6 @@ spec:
     kind: TFJob
     plural: tfjobs
     singular: tfjob
-  preserveUnknownFields: false
   scope: Namespaced
   validation:
     openAPIV3Schema:
@@ -28,6 +27,282 @@ spec:
             object represents. Servers may infer this from the endpoint the client
             submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
           type: string
+        metadata:
+          description: ObjectMeta is metadata that all persisted resources must have,
+            which includes all objects users must create.
+          properties:
+            annotations:
+              additionalProperties:
+                type: string
+              description: 'Annotations is an unstructured key value map stored with
+                a resource that may be set by external tools to store and retrieve
+                arbitrary metadata. They are not queryable and should be preserved
+                when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations'
+              type: object
+            clusterName:
+              description: The name of the cluster which the object belongs to. This
+                is used to distinguish resources with same name and namespace in different
+                clusters. This field is not set anywhere right now and apiserver is
+                going to ignore it if set in create or update request.
+              type: string
+            creationTimestamp:
+              format: date-time
+              type: string
+            deletionGracePeriodSeconds:
+              description: Number of seconds allowed for this object to gracefully
+                terminate before it will be removed from the system. Only set when
+                deletionTimestamp is also set. May only be shortened. Read-only.
+              format: int64
+              type: integer
+            deletionTimestamp:
+              format: date-time
+              type: string
+            finalizers:
+              description: Must be empty before the object is deleted from the registry.
+                Each entry is an identifier for the responsible component that will
+                remove the entry from the list. If the deletionTimestamp of the object
+                is non-nil, entries in this list can only be removed.
+              items:
+                type: string
+              type: array
+            generateName:
+              description: |-
+                GenerateName is an optional prefix, used by the server, to generate a unique name ONLY IF the Name field has not been provided. If this field is used, the name returned to the client will be different than the name passed. This value will also be combined with a unique suffix. The provided value has the same validation rules as the Name field, and may be truncated by the length of the suffix required to make the value unique on the server.
+
+                If this field is specified and the generated name exists, the server will NOT return a 409 - instead, it will either return 201 Created or 500 with Reason ServerTimeout indicating a unique name could not be found in the time allotted, and the client should retry (optionally after the time indicated in the Retry-After header).
+
+                Applied only if Name is not specified. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#idempotency
+              type: string
+            generation:
+              description: A sequence number representing a specific generation of
+                the desired state. Populated by the system. Read-only.
+              format: int64
+              type: integer
+            initializers:
+              description: Initializers tracks the progress of initialization.
+              properties:
+                pending:
+                  description: Pending is a list of initializers that must execute
+                    in order before this object is visible. When the last pending
+                    initializer is removed, and no failing result is set, the initializers
+                    struct will be set to nil and the object is considered as initialized
+                    and visible to all clients.
+                  items:
+                    description: Initializer is information about an initializer that
+                      has not yet completed.
+                    properties:
+                      name:
+                        description: name of the process that is responsible for initializing
+                          this object.
+                        type: string
+                    required:
+                    - name
+                  type: array
+                result:
+                  description: Status is a return value for calls that don't return
+                    other objects.
+                  properties:
+                    apiVersion:
+                      description: 'APIVersion defines the versioned schema of this
+                        representation of an object. Servers should convert recognized
+                        schemas to the latest internal value, and may reject unrecognized
+                        values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+                      type: string
+                    code:
+                      description: Suggested HTTP return code for this status, 0 if
+                        not set.
+                      format: int32
+                      type: integer
+                    details:
+                      description: StatusDetails is a set of additional properties
+                        that MAY be set by the server to provide additional information
+                        about a response. The Reason field of a Status object defines
+                        what attributes will be set. Clients must ignore fields that
+                        do not match the defined type of each attribute, and should
+                        assume that any attribute may be empty, invalid, or under
+                        defined.
+                      properties:
+                        causes:
+                          description: The Causes array includes more details associated
+                            with the StatusReason failure. Not all StatusReasons may
+                            provide detailed causes.
+                          items:
+                            description: StatusCause provides more information about
+                              an api.Status failure, including cases when multiple
+                              errors are encountered.
+                            properties:
+                              field:
+                                description: |-
+                                  The field of the resource that has caused this error, as named by its JSON serialization. May include dot and postfix notation for nested attributes. Arrays are zero-indexed.  Fields may appear more than once in an array of causes due to fields having multiple errors. Optional.
+
+                                  Examples:
+                                    "name" - the field "name" on the current resource
+                                    "items[0].name" - the field "name" on the first array entry in "items"
+                                type: string
+                              message:
+                                description: A human-readable description of the cause
+                                  of the error.  This field may be presented as-is
+                                  to a reader.
+                                type: string
+                              reason:
+                                description: A machine-readable description of the
+                                  cause of the error. If this value is empty there
+                                  is no information available.
+                                type: string
+                          type: array
+                        group:
+                          description: The group attribute of the resource associated
+                            with the status StatusReason.
+                          type: string
+                        kind:
+                          description: 'The kind attribute of the resource associated
+                            with the status StatusReason. On some operations may differ
+                            from the requested resource Kind. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                          type: string
+                        name:
+                          description: The name attribute of the resource associated
+                            with the status StatusReason (when there is a single name
+                            which can be described).
+                          type: string
+                        retryAfterSeconds:
+                          description: If specified, the time in seconds before the
+                            operation should be retried. Some errors may indicate
+                            the client must take an alternate action - for those errors
+                            this field may indicate how long to wait before taking
+                            the alternate action.
+                          format: int32
+                          type: integer
+                        uid:
+                          description: 'UID of the resource. (when there is a single
+                            resource which can be described). More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
+                          type: string
+                    kind:
+                      description: 'Kind is a string value representing the REST resource
+                        this object represents. Servers may infer this from the endpoint
+                        the client submits requests to. Cannot be updated. In CamelCase.
+                        More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                      type: string
+                    message:
+                      description: A human-readable description of the status of this
+                        operation.
+                      type: string
+                    metadata:
+                      description: ListMeta describes metadata that synthetic resources
+                        must have, including lists and various status objects. A resource
+                        may have only one of {ObjectMeta, ListMeta}.
+                      properties:
+                        continue:
+                          description: continue may be set if the user set a limit
+                            on the number of items returned, and indicates that the
+                            server has more data available. The value is opaque and
+                            may be used to issue another request to the endpoint that
+                            served this list to retrieve the next set of available
+                            objects. Continuing a consistent list may not be possible
+                            if the server configuration has changed or more than a
+                            few minutes have passed. The resourceVersion field returned
+                            when using this continue value will be identical to the
+                            value in the first response, unless you have received
+                            this token from an error message.
+                          type: string
+                        resourceVersion:
+                          description: 'String that identifies the server''s internal
+                            version of this object that can be used by clients to
+                            determine when objects have changed. Value must be treated
+                            as opaque by clients and passed unmodified back to the
+                            server. Populated by the system. Read-only. More info:
+                            https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency'
+                          type: string
+                        selfLink:
+                          description: selfLink is a URL representing this object.
+                            Populated by the system. Read-only.
+                          type: string
+                    reason:
+                      description: A machine-readable description of why this operation
+                        is in the "Failure" status. If this value is empty there is
+                        no information available. A Reason clarifies an HTTP status
+                        code but does not override it.
+                      type: string
+                    status:
+                      description: 'Status of the operation. One of: "Success" or
+                        "Failure". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status'
+                      type: string
+              required:
+              - pending
+            labels:
+              additionalProperties:
+                type: string
+              description: 'Map of string keys and values that can be used to organize
+                and categorize (scope and select) objects. May match selectors of
+                replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels'
+              type: object
+            name:
+              description: 'Name must be unique within a namespace. Is required when
+                creating resources, although some resources may allow a client to
+                request the generation of an appropriate name automatically. Name
+                is primarily intended for creation idempotence and configuration definition.
+                Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+              type: string
+            namespace:
+              description: |-
+                Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+
+                Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+              type: string
+            ownerReferences:
+              description: List of objects depended by this object. If ALL objects
+                in the list have been deleted, this object will be garbage collected.
+                If this object is managed by a controller, then an entry in this list
+                will point to this controller, with the controller field set to true.
+                There cannot be more than one managing controller.
+              items:
+                description: OwnerReference contains enough information to let you
+                  identify an owning object. Currently, an owning object must be in
+                  the same namespace, so there is no namespace field.
+                properties:
+                  apiVersion:
+                    description: API version of the referent.
+                    type: string
+                  blockOwnerDeletion:
+                    description: If true, AND if the owner has the "foregroundDeletion"
+                      finalizer, then the owner cannot be deleted from the key-value
+                      store until this reference is removed. Defaults to false. To
+                      set this field, a user needs "delete" permission of the owner,
+                      otherwise 422 (Unprocessable Entity) will be returned.
+                    type: boolean
+                  controller:
+                    description: If true, this reference points to the managing controller.
+                    type: boolean
+                  kind:
+                    description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                    type: string
+                  uid:
+                    description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
+                    type: string
+                required:
+                - apiVersion
+                - kind
+                - name
+                - uid
+              type: array
+            resourceVersion:
+              description: |-
+                An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+                Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
+              type: string
+            selfLink:
+              description: SelfLink is a URL representing this object. Populated by
+                the system. Read-only.
+              type: string
+            uid:
+              description: |-
+                UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
+
+                Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+              type: string
         spec:
           description: TFJobSpec is a desired state description of the TFJob.
           properties:
@@ -66,6 +341,309 @@ spec:
                     description: PodTemplateSpec describes the data a pod should have
                       when created from a template
                     properties:
+                      metadata:
+                        description: ObjectMeta is metadata that all persisted resources
+                          must have, which includes all objects users must create.
+                        properties:
+                          annotations:
+                            additionalProperties:
+                              type: string
+                            description: 'Annotations is an unstructured key value
+                              map stored with a resource that may be set by external
+                              tools to store and retrieve arbitrary metadata. They
+                              are not queryable and should be preserved when modifying
+                              objects. More info: http://kubernetes.io/docs/user-guide/annotations'
+                            type: object
+                          clusterName:
+                            description: The name of the cluster which the object
+                              belongs to. This is used to distinguish resources with
+                              same name and namespace in different clusters. This
+                              field is not set anywhere right now and apiserver is
+                              going to ignore it if set in create or update request.
+                            type: string
+                          creationTimestamp:
+                            format: date-time
+                            type: string
+                          deletionGracePeriodSeconds:
+                            description: Number of seconds allowed for this object
+                              to gracefully terminate before it will be removed from
+                              the system. Only set when deletionTimestamp is also
+                              set. May only be shortened. Read-only.
+                            format: int64
+                            type: integer
+                          deletionTimestamp:
+                            format: date-time
+                            type: string
+                          finalizers:
+                            description: Must be empty before the object is deleted
+                              from the registry. Each entry is an identifier for the
+                              responsible component that will remove the entry from
+                              the list. If the deletionTimestamp of the object is
+                              non-nil, entries in this list can only be removed.
+                            items:
+                              type: string
+                            type: array
+                          generateName:
+                            description: |-
+                              GenerateName is an optional prefix, used by the server, to generate a unique name ONLY IF the Name field has not been provided. If this field is used, the name returned to the client will be different than the name passed. This value will also be combined with a unique suffix. The provided value has the same validation rules as the Name field, and may be truncated by the length of the suffix required to make the value unique on the server.
+
+                              If this field is specified and the generated name exists, the server will NOT return a 409 - instead, it will either return 201 Created or 500 with Reason ServerTimeout indicating a unique name could not be found in the time allotted, and the client should retry (optionally after the time indicated in the Retry-After header).
+
+                              Applied only if Name is not specified. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#idempotency
+                            type: string
+                          generation:
+                            description: A sequence number representing a specific
+                              generation of the desired state. Populated by the system.
+                              Read-only.
+                            format: int64
+                            type: integer
+                          initializers:
+                            description: Initializers tracks the progress of initialization.
+                            properties:
+                              pending:
+                                description: Pending is a list of initializers that
+                                  must execute in order before this object is visible.
+                                  When the last pending initializer is removed, and
+                                  no failing result is set, the initializers struct
+                                  will be set to nil and the object is considered
+                                  as initialized and visible to all clients.
+                                items:
+                                  description: Initializer is information about an
+                                    initializer that has not yet completed.
+                                  properties:
+                                    name:
+                                      description: name of the process that is responsible
+                                        for initializing this object.
+                                      type: string
+                                  required:
+                                  - name
+                                type: array
+                              result:
+                                description: Status is a return value for calls that
+                                  don't return other objects.
+                                properties:
+                                  apiVersion:
+                                    description: 'APIVersion defines the versioned
+                                      schema of this representation of an object.
+                                      Servers should convert recognized schemas to
+                                      the latest internal value, and may reject unrecognized
+                                      values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+                                    type: string
+                                  code:
+                                    description: Suggested HTTP return code for this
+                                      status, 0 if not set.
+                                    format: int32
+                                    type: integer
+                                  details:
+                                    description: StatusDetails is a set of additional
+                                      properties that MAY be set by the server to
+                                      provide additional information about a response.
+                                      The Reason field of a Status object defines
+                                      what attributes will be set. Clients must ignore
+                                      fields that do not match the defined type of
+                                      each attribute, and should assume that any attribute
+                                      may be empty, invalid, or under defined.
+                                    properties:
+                                      causes:
+                                        description: The Causes array includes more
+                                          details associated with the StatusReason
+                                          failure. Not all StatusReasons may provide
+                                          detailed causes.
+                                        items:
+                                          description: StatusCause provides more information
+                                            about an api.Status failure, including
+                                            cases when multiple errors are encountered.
+                                          properties:
+                                            field:
+                                              description: |-
+                                                The field of the resource that has caused this error, as named by its JSON serialization. May include dot and postfix notation for nested attributes. Arrays are zero-indexed.  Fields may appear more than once in an array of causes due to fields having multiple errors. Optional.
+
+                                                Examples:
+                                                  "name" - the field "name" on the current resource
+                                                  "items[0].name" - the field "name" on the first array entry in "items"
+                                              type: string
+                                            message:
+                                              description: A human-readable description
+                                                of the cause of the error.  This field
+                                                may be presented as-is to a reader.
+                                              type: string
+                                            reason:
+                                              description: A machine-readable description
+                                                of the cause of the error. If this
+                                                value is empty there is no information
+                                                available.
+                                              type: string
+                                        type: array
+                                      group:
+                                        description: The group attribute of the resource
+                                          associated with the status StatusReason.
+                                        type: string
+                                      kind:
+                                        description: 'The kind attribute of the resource
+                                          associated with the status StatusReason.
+                                          On some operations may differ from the requested
+                                          resource Kind. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                                        type: string
+                                      name:
+                                        description: The name attribute of the resource
+                                          associated with the status StatusReason
+                                          (when there is a single name which can be
+                                          described).
+                                        type: string
+                                      retryAfterSeconds:
+                                        description: If specified, the time in seconds
+                                          before the operation should be retried.
+                                          Some errors may indicate the client must
+                                          take an alternate action - for those errors
+                                          this field may indicate how long to wait
+                                          before taking the alternate action.
+                                        format: int32
+                                        type: integer
+                                      uid:
+                                        description: 'UID of the resource. (when there
+                                          is a single resource which can be described).
+                                          More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
+                                        type: string
+                                  kind:
+                                    description: 'Kind is a string value representing
+                                      the REST resource this object represents. Servers
+                                      may infer this from the endpoint the client
+                                      submits requests to. Cannot be updated. In CamelCase.
+                                      More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                                    type: string
+                                  message:
+                                    description: A human-readable description of the
+                                      status of this operation.
+                                    type: string
+                                  metadata:
+                                    description: ListMeta describes metadata that
+                                      synthetic resources must have, including lists
+                                      and various status objects. A resource may have
+                                      only one of {ObjectMeta, ListMeta}.
+                                    properties:
+                                      continue:
+                                        description: continue may be set if the user
+                                          set a limit on the number of items returned,
+                                          and indicates that the server has more data
+                                          available. The value is opaque and may be
+                                          used to issue another request to the endpoint
+                                          that served this list to retrieve the next
+                                          set of available objects. Continuing a consistent
+                                          list may not be possible if the server configuration
+                                          has changed or more than a few minutes have
+                                          passed. The resourceVersion field returned
+                                          when using this continue value will be identical
+                                          to the value in the first response, unless
+                                          you have received this token from an error
+                                          message.
+                                        type: string
+                                      resourceVersion:
+                                        description: 'String that identifies the server''s
+                                          internal version of this object that can
+                                          be used by clients to determine when objects
+                                          have changed. Value must be treated as opaque
+                                          by clients and passed unmodified back to
+                                          the server. Populated by the system. Read-only.
+                                          More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency'
+                                        type: string
+                                      selfLink:
+                                        description: selfLink is a URL representing
+                                          this object. Populated by the system. Read-only.
+                                        type: string
+                                  reason:
+                                    description: A machine-readable description of
+                                      why this operation is in the "Failure" status.
+                                      If this value is empty there is no information
+                                      available. A Reason clarifies an HTTP status
+                                      code but does not override it.
+                                    type: string
+                                  status:
+                                    description: 'Status of the operation. One of:
+                                      "Success" or "Failure". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status'
+                                    type: string
+                            required:
+                            - pending
+                          labels:
+                            additionalProperties:
+                              type: string
+                            description: 'Map of string keys and values that can be
+                              used to organize and categorize (scope and select) objects.
+                              May match selectors of replication controllers and services.
+                              More info: http://kubernetes.io/docs/user-guide/labels'
+                            type: object
+                          name:
+                            description: 'Name must be unique within a namespace.
+                              Is required when creating resources, although some resources
+                              may allow a client to request the generation of an appropriate
+                              name automatically. Name is primarily intended for creation
+                              idempotence and configuration definition. Cannot be
+                              updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                            type: string
+                          namespace:
+                            description: |-
+                              Namespace defines the space within each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
+
+                              Must be a DNS_LABEL. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/namespaces
+                            type: string
+                          ownerReferences:
+                            description: List of objects depended by this object.
+                              If ALL objects in the list have been deleted, this object
+                              will be garbage collected. If this object is managed
+                              by a controller, then an entry in this list will point
+                              to this controller, with the controller field set to
+                              true. There cannot be more than one managing controller.
+                            items:
+                              description: OwnerReference contains enough information
+                                to let you identify an owning object. Currently, an
+                                owning object must be in the same namespace, so there
+                                is no namespace field.
+                              properties:
+                                apiVersion:
+                                  description: API version of the referent.
+                                  type: string
+                                blockOwnerDeletion:
+                                  description: If true, AND if the owner has the "foregroundDeletion"
+                                    finalizer, then the owner cannot be deleted from
+                                    the key-value store until this reference is removed.
+                                    Defaults to false. To set this field, a user needs
+                                    "delete" permission of the owner, otherwise 422
+                                    (Unprocessable Entity) will be returned.
+                                  type: boolean
+                                controller:
+                                  description: If true, this reference points to the
+                                    managing controller.
+                                  type: boolean
+                                kind:
+                                  description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                                  type: string
+                                name:
+                                  description: 'Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                                  type: string
+                                uid:
+                                  description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
+                                  type: string
+                              required:
+                              - apiVersion
+                              - kind
+                              - name
+                              - uid
+                            type: array
+                          resourceVersion:
+                            description: |-
+                              An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
+
+                              Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#concurrency-control-and-consistency
+                            type: string
+                          selfLink:
+                            description: SelfLink is a URL representing this object.
+                              Populated by the system. Read-only.
+                            type: string
+                          uid:
+                            description: |-
+                              UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
+
+                              Populated by the system. Read-only. More info: http://kubernetes.io/docs/user-guide/identifiers#uids
+                            type: string
                       spec:
                         description: PodSpec is a description of a pod.
                         properties:
@@ -149,7 +727,6 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
                                             matchFields:
                                               description: A list of node selector
@@ -190,9 +767,7 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
-                                          type: object
                                         weight:
                                           description: Weight associated with matching
                                             the corresponding nodeSelectorTerm, in
@@ -202,7 +777,6 @@ spec:
                                       required:
                                       - weight
                                       - preference
-                                      type: object
                                     type: array
                                   requiredDuringSchedulingIgnoredDuringExecution:
                                     description: A node selector represents the union
@@ -259,7 +833,6 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
                                             matchFields:
                                               description: A list of node selector
@@ -300,14 +873,10 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
-                                          type: object
                                         type: array
                                     required:
                                     - nodeSelectorTerms
-                                    type: object
-                                type: object
                               podAffinity:
                                 description: Pod affinity is a group of inter pod
                                   affinity scheduling rules.
@@ -391,7 +960,6 @@ spec:
                                                     required:
                                                     - key
                                                     - operator
-                                                    type: object
                                                   type: array
                                                 matchLabels:
                                                   additionalProperties:
@@ -406,7 +974,6 @@ spec:
                                                     only "value". The requirements
                                                     are ANDed.
                                                   type: object
-                                              type: object
                                             namespaces:
                                               description: namespaces specifies which
                                                 namespaces the labelSelector applies
@@ -429,7 +996,6 @@ spec:
                                               type: string
                                           required:
                                           - topologyKey
-                                          type: object
                                         weight:
                                           description: weight associated with matching
                                             the corresponding podAffinityTerm, in
@@ -439,7 +1005,6 @@ spec:
                                       required:
                                       - weight
                                       - podAffinityTerm
-                                      type: object
                                     type: array
                                   requiredDuringSchedulingIgnoredDuringExecution:
                                     description: If the affinity requirements specified
@@ -507,7 +1072,6 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
                                             matchLabels:
                                               additionalProperties:
@@ -521,7 +1085,6 @@ spec:
                                                 only "value". The requirements are
                                                 ANDed.
                                               type: object
-                                          type: object
                                         namespaces:
                                           description: namespaces specifies which
                                             namespaces the labelSelector applies to
@@ -543,9 +1106,7 @@ spec:
                                           type: string
                                       required:
                                       - topologyKey
-                                      type: object
                                     type: array
-                                type: object
                               podAntiAffinity:
                                 description: Pod anti affinity is a group of inter
                                   pod anti affinity scheduling rules.
@@ -629,7 +1190,6 @@ spec:
                                                     required:
                                                     - key
                                                     - operator
-                                                    type: object
                                                   type: array
                                                 matchLabels:
                                                   additionalProperties:
@@ -644,7 +1204,6 @@ spec:
                                                     only "value". The requirements
                                                     are ANDed.
                                                   type: object
-                                              type: object
                                             namespaces:
                                               description: namespaces specifies which
                                                 namespaces the labelSelector applies
@@ -667,7 +1226,6 @@ spec:
                                               type: string
                                           required:
                                           - topologyKey
-                                          type: object
                                         weight:
                                           description: weight associated with matching
                                             the corresponding podAffinityTerm, in
@@ -677,7 +1235,6 @@ spec:
                                       required:
                                       - weight
                                       - podAffinityTerm
-                                      type: object
                                     type: array
                                   requiredDuringSchedulingIgnoredDuringExecution:
                                     description: If the anti-affinity requirements
@@ -745,7 +1302,6 @@ spec:
                                                 required:
                                                 - key
                                                 - operator
-                                                type: object
                                               type: array
                                             matchLabels:
                                               additionalProperties:
@@ -759,7 +1315,6 @@ spec:
                                                 only "value". The requirements are
                                                 ANDed.
                                               type: object
-                                          type: object
                                         namespaces:
                                           description: namespaces specifies which
                                             namespaces the labelSelector applies to
@@ -781,10 +1336,7 @@ spec:
                                           type: string
                                       required:
                                       - topologyKey
-                                      type: object
                                     type: array
-                                type: object
-                            type: object
                           automountServiceAccountToken:
                             description: AutomountServiceAccountToken indicates whether
                               a service account token should be automatically mounted.
@@ -869,7 +1421,6 @@ spec:
                                                 type: boolean
                                             required:
                                             - key
-                                            type: object
                                           fieldRef:
                                             description: ObjectFieldSelector selects
                                               an APIVersioned field of an object.
@@ -885,7 +1436,6 @@ spec:
                                                 type: string
                                             required:
                                             - fieldPath
-                                            type: object
                                           resourceFieldRef:
                                             description: ResourceFieldSelector represents
                                               container resources (cpu, memory) and
@@ -903,7 +1453,6 @@ spec:
                                                 type: string
                                             required:
                                             - resource
-                                            type: object
                                           secretKeyRef:
                                             description: SecretKeySelector selects
                                               a key of a Secret.
@@ -923,11 +1472,8 @@ spec:
                                                 type: boolean
                                             required:
                                             - key
-                                            type: object
-                                        type: object
                                     required:
                                     - name
-                                    type: object
                                   type: array
                                 envFrom:
                                   description: List of sources to populate environment
@@ -957,7 +1503,6 @@ spec:
                                             description: Specify whether the ConfigMap
                                               must be defined
                                             type: boolean
-                                        type: object
                                       prefix:
                                         description: An optional identifier to prepend
                                           to each key in the ConfigMap. Must be a
@@ -977,8 +1522,6 @@ spec:
                                             description: Specify whether the Secret
                                               must be defined
                                             type: boolean
-                                        type: object
-                                    type: object
                                   type: array
                                 image:
                                   description: 'Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images
@@ -1024,7 +1567,6 @@ spec:
                                               items:
                                                 type: string
                                               type: array
-                                          type: object
                                         httpGet:
                                           description: HTTPGetAction describes an
                                             action based on HTTP Get requests.
@@ -1055,21 +1597,21 @@ spec:
                                                 required:
                                                 - name
                                                 - value
-                                                type: object
                                               type: array
                                             path:
                                               description: Path to access on the HTTP
                                                 server.
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                             scheme:
                                               description: Scheme to use for connecting
                                                 to the host. Defaults to HTTP.
                                               type: string
                                           required:
                                           - port
-                                          type: object
                                         tcpSocket:
                                           description: TCPSocketAction describes an
                                             action based on opening a socket
@@ -1079,11 +1621,11 @@ spec:
                                                 connect to, defaults to the pod IP.'
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                           required:
                                           - port
-                                          type: object
-                                      type: object
                                     preStop:
                                       description: Handler defines a specific action
                                         that should be taken
@@ -1107,7 +1649,6 @@ spec:
                                               items:
                                                 type: string
                                               type: array
-                                          type: object
                                         httpGet:
                                           description: HTTPGetAction describes an
                                             action based on HTTP Get requests.
@@ -1138,21 +1679,21 @@ spec:
                                                 required:
                                                 - name
                                                 - value
-                                                type: object
                                               type: array
                                             path:
                                               description: Path to access on the HTTP
                                                 server.
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                             scheme:
                                               description: Scheme to use for connecting
                                                 to the host. Defaults to HTTP.
                                               type: string
                                           required:
                                           - port
-                                          type: object
                                         tcpSocket:
                                           description: TCPSocketAction describes an
                                             action based on opening a socket
@@ -1162,12 +1703,11 @@ spec:
                                                 connect to, defaults to the pod IP.'
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                           required:
                                           - port
-                                          type: object
-                                      type: object
-                                  type: object
                                 livenessProbe:
                                   description: Probe describes a health check to be
                                     performed against a container to determine whether
@@ -1191,7 +1731,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     failureThreshold:
                                       description: Minimum consecutive failures for
                                         the probe to be considered failed after having
@@ -1224,21 +1763,21 @@ spec:
                                             required:
                                             - name
                                             - value
-                                            type: object
                                           type: array
                                         path:
                                           description: Path to access on the HTTP
                                             server.
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                         scheme:
                                           description: Scheme to use for connecting
                                             to the host. Defaults to HTTP.
                                           type: string
                                       required:
                                       - port
-                                      type: object
                                     initialDelaySeconds:
                                       description: 'Number of seconds after the container
                                         has started before liveness probes are initiated.
@@ -1267,17 +1806,17 @@ spec:
                                             to, defaults to the pod IP.'
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                       required:
                                       - port
-                                      type: object
                                     timeoutSeconds:
                                       description: 'Number of seconds after which
                                         the probe times out. Defaults to 1 second.
                                         Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                                       format: int32
                                       type: integer
-                                  type: object
                                 name:
                                   description: Name of the container specified as
                                     a DNS_LABEL. Each container in a pod must have
@@ -1327,7 +1866,6 @@ spec:
                                         type: string
                                     required:
                                     - containerPort
-                                    type: object
                                   type: array
                                 readinessProbe:
                                   description: Probe describes a health check to be
@@ -1352,7 +1890,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     failureThreshold:
                                       description: Minimum consecutive failures for
                                         the probe to be considered failed after having
@@ -1385,21 +1922,21 @@ spec:
                                             required:
                                             - name
                                             - value
-                                            type: object
                                           type: array
                                         path:
                                           description: Path to access on the HTTP
                                             server.
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                         scheme:
                                           description: Scheme to use for connecting
                                             to the host. Defaults to HTTP.
                                           type: string
                                       required:
                                       - port
-                                      type: object
                                     initialDelaySeconds:
                                       description: 'Number of seconds after the container
                                         has started before liveness probes are initiated.
@@ -1428,17 +1965,17 @@ spec:
                                             to, defaults to the pod IP.'
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                       required:
                                       - port
-                                      type: object
                                     timeoutSeconds:
                                       description: 'Number of seconds after which
                                         the probe times out. Defaults to 1 second.
                                         Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                                       format: int32
                                       type: integer
-                                  type: object
                                 resources:
                                   description: ResourceRequirements describes the
                                     compute resource requirements.
@@ -1459,7 +1996,6 @@ spec:
                                         to an implementation-defined value. More info:
                                         https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                                       type: object
-                                  type: object
                                 securityContext:
                                   description: SecurityContext holds security configuration
                                     that will be applied to a container. Some fields
@@ -1490,7 +2026,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     privileged:
                                       description: Run container in privileged mode.
                                         Processes in privileged containers are essentially
@@ -1559,8 +2094,6 @@ spec:
                                           description: User is a SELinux user label
                                             that applies to the container.
                                           type: string
-                                      type: object
-                                  type: object
                                 stdin:
                                   description: Whether this container should allocate
                                     a buffer for stdin in the container runtime. If
@@ -1628,7 +2161,6 @@ spec:
                                     required:
                                     - name
                                     - devicePath
-                                    type: object
                                   type: array
                                 volumeMounts:
                                   description: Pod volumes to mount into the container's
@@ -1666,7 +2198,6 @@ spec:
                                     required:
                                     - name
                                     - mountPath
-                                    type: object
                                   type: array
                                 workingDir:
                                   description: Container's working directory. If not
@@ -1676,7 +2207,6 @@ spec:
                                   type: string
                               required:
                               - name
-                              type: object
                             type: array
                           dnsConfig:
                             description: PodDNSConfig defines the DNS parameters of
@@ -1704,7 +2234,6 @@ spec:
                                       type: string
                                     value:
                                       type: string
-                                  type: object
                                 type: array
                               searches:
                                 description: A list of DNS search domains for host-name
@@ -1714,7 +2243,6 @@ spec:
                                 items:
                                   type: string
                                 type: array
-                            type: object
                           dnsPolicy:
                             description: Set DNS policy for the pod. Defaults to "ClusterFirst".
                               Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',
@@ -1741,7 +2269,6 @@ spec:
                                 ip:
                                   description: IP address of the host file entry.
                                   type: string
-                              type: object
                             type: array
                           hostIPC:
                             description: 'Use the host''s ipc namespace. Optional:
@@ -1778,7 +2305,6 @@ spec:
                                 name:
                                   description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                   type: string
-                              type: object
                             type: array
                           initContainers:
                             description: 'List of initialization containers belonging
@@ -1872,7 +2398,6 @@ spec:
                                                 type: boolean
                                             required:
                                             - key
-                                            type: object
                                           fieldRef:
                                             description: ObjectFieldSelector selects
                                               an APIVersioned field of an object.
@@ -1888,7 +2413,6 @@ spec:
                                                 type: string
                                             required:
                                             - fieldPath
-                                            type: object
                                           resourceFieldRef:
                                             description: ResourceFieldSelector represents
                                               container resources (cpu, memory) and
@@ -1906,7 +2430,6 @@ spec:
                                                 type: string
                                             required:
                                             - resource
-                                            type: object
                                           secretKeyRef:
                                             description: SecretKeySelector selects
                                               a key of a Secret.
@@ -1926,11 +2449,8 @@ spec:
                                                 type: boolean
                                             required:
                                             - key
-                                            type: object
-                                        type: object
                                     required:
                                     - name
-                                    type: object
                                   type: array
                                 envFrom:
                                   description: List of sources to populate environment
@@ -1960,7 +2480,6 @@ spec:
                                             description: Specify whether the ConfigMap
                                               must be defined
                                             type: boolean
-                                        type: object
                                       prefix:
                                         description: An optional identifier to prepend
                                           to each key in the ConfigMap. Must be a
@@ -1980,8 +2499,6 @@ spec:
                                             description: Specify whether the Secret
                                               must be defined
                                             type: boolean
-                                        type: object
-                                    type: object
                                   type: array
                                 image:
                                   description: 'Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images
@@ -2027,7 +2544,6 @@ spec:
                                               items:
                                                 type: string
                                               type: array
-                                          type: object
                                         httpGet:
                                           description: HTTPGetAction describes an
                                             action based on HTTP Get requests.
@@ -2058,21 +2574,21 @@ spec:
                                                 required:
                                                 - name
                                                 - value
-                                                type: object
                                               type: array
                                             path:
                                               description: Path to access on the HTTP
                                                 server.
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                             scheme:
                                               description: Scheme to use for connecting
                                                 to the host. Defaults to HTTP.
                                               type: string
                                           required:
                                           - port
-                                          type: object
                                         tcpSocket:
                                           description: TCPSocketAction describes an
                                             action based on opening a socket
@@ -2082,11 +2598,11 @@ spec:
                                                 connect to, defaults to the pod IP.'
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                           required:
                                           - port
-                                          type: object
-                                      type: object
                                     preStop:
                                       description: Handler defines a specific action
                                         that should be taken
@@ -2110,7 +2626,6 @@ spec:
                                               items:
                                                 type: string
                                               type: array
-                                          type: object
                                         httpGet:
                                           description: HTTPGetAction describes an
                                             action based on HTTP Get requests.
@@ -2141,21 +2656,21 @@ spec:
                                                 required:
                                                 - name
                                                 - value
-                                                type: object
                                               type: array
                                             path:
                                               description: Path to access on the HTTP
                                                 server.
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                             scheme:
                                               description: Scheme to use for connecting
                                                 to the host. Defaults to HTTP.
                                               type: string
                                           required:
                                           - port
-                                          type: object
                                         tcpSocket:
                                           description: TCPSocketAction describes an
                                             action based on opening a socket
@@ -2165,12 +2680,11 @@ spec:
                                                 connect to, defaults to the pod IP.'
                                               type: string
                                             port:
-                                              type: string
+                                              anyOf:
+                                              - type: string
+                                              - type: integer
                                           required:
                                           - port
-                                          type: object
-                                      type: object
-                                  type: object
                                 livenessProbe:
                                   description: Probe describes a health check to be
                                     performed against a container to determine whether
@@ -2194,7 +2708,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     failureThreshold:
                                       description: Minimum consecutive failures for
                                         the probe to be considered failed after having
@@ -2227,21 +2740,21 @@ spec:
                                             required:
                                             - name
                                             - value
-                                            type: object
                                           type: array
                                         path:
                                           description: Path to access on the HTTP
                                             server.
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                         scheme:
                                           description: Scheme to use for connecting
                                             to the host. Defaults to HTTP.
                                           type: string
                                       required:
                                       - port
-                                      type: object
                                     initialDelaySeconds:
                                       description: 'Number of seconds after the container
                                         has started before liveness probes are initiated.
@@ -2270,17 +2783,17 @@ spec:
                                             to, defaults to the pod IP.'
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                       required:
                                       - port
-                                      type: object
                                     timeoutSeconds:
                                       description: 'Number of seconds after which
                                         the probe times out. Defaults to 1 second.
                                         Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                                       format: int32
                                       type: integer
-                                  type: object
                                 name:
                                   description: Name of the container specified as
                                     a DNS_LABEL. Each container in a pod must have
@@ -2330,7 +2843,6 @@ spec:
                                         type: string
                                     required:
                                     - containerPort
-                                    type: object
                                   type: array
                                 readinessProbe:
                                   description: Probe describes a health check to be
@@ -2355,7 +2867,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     failureThreshold:
                                       description: Minimum consecutive failures for
                                         the probe to be considered failed after having
@@ -2388,21 +2899,21 @@ spec:
                                             required:
                                             - name
                                             - value
-                                            type: object
                                           type: array
                                         path:
                                           description: Path to access on the HTTP
                                             server.
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                         scheme:
                                           description: Scheme to use for connecting
                                             to the host. Defaults to HTTP.
                                           type: string
                                       required:
                                       - port
-                                      type: object
                                     initialDelaySeconds:
                                       description: 'Number of seconds after the container
                                         has started before liveness probes are initiated.
@@ -2431,17 +2942,17 @@ spec:
                                             to, defaults to the pod IP.'
                                           type: string
                                         port:
-                                          type: string
+                                          anyOf:
+                                          - type: string
+                                          - type: integer
                                       required:
                                       - port
-                                      type: object
                                     timeoutSeconds:
                                       description: 'Number of seconds after which
                                         the probe times out. Defaults to 1 second.
                                         Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
                                       format: int32
                                       type: integer
-                                  type: object
                                 resources:
                                   description: ResourceRequirements describes the
                                     compute resource requirements.
@@ -2462,7 +2973,6 @@ spec:
                                         to an implementation-defined value. More info:
                                         https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                                       type: object
-                                  type: object
                                 securityContext:
                                   description: SecurityContext holds security configuration
                                     that will be applied to a container. Some fields
@@ -2493,7 +3003,6 @@ spec:
                                           items:
                                             type: string
                                           type: array
-                                      type: object
                                     privileged:
                                       description: Run container in privileged mode.
                                         Processes in privileged containers are essentially
@@ -2562,8 +3071,6 @@ spec:
                                           description: User is a SELinux user label
                                             that applies to the container.
                                           type: string
-                                      type: object
-                                  type: object
                                 stdin:
                                   description: Whether this container should allocate
                                     a buffer for stdin in the container runtime. If
@@ -2631,7 +3138,6 @@ spec:
                                     required:
                                     - name
                                     - devicePath
-                                    type: object
                                   type: array
                                 volumeMounts:
                                   description: Pod volumes to mount into the container's
@@ -2669,7 +3175,6 @@ spec:
                                     required:
                                     - name
                                     - mountPath
-                                    type: object
                                   type: array
                                 workingDir:
                                   description: Container's working directory. If not
@@ -2679,7 +3184,6 @@ spec:
                                   type: string
                               required:
                               - name
-                              type: object
                             type: array
                           nodeName:
                             description: NodeName is a request to schedule this pod
@@ -2729,7 +3233,6 @@ spec:
                                   type: string
                               required:
                               - conditionType
-                              type: object
                             type: array
                           restartPolicy:
                             description: 'Restart policy for all containers within
@@ -2815,7 +3318,6 @@ spec:
                                     description: User is a SELinux user label that
                                       applies to the container.
                                     type: string
-                                type: object
                               supplementalGroups:
                                 description: A list of groups applied to the first
                                   process run in each container, in addition to the
@@ -2842,9 +3344,7 @@ spec:
                                   required:
                                   - name
                                   - value
-                                  type: object
                                 type: array
-                            type: object
                           serviceAccount:
                             description: 'DeprecatedServiceAccount is a depreciated
                               alias for ServiceAccountName. Deprecated: Use serviceAccountName
@@ -2926,7 +3426,6 @@ spec:
                                     matches to. If the operator is Exists, the value
                                     should be empty, otherwise just a regular string.
                                   type: string
-                              type: object
                             type: array
                           volumes:
                             description: 'List of volumes that can be mounted by containers
@@ -2972,7 +3471,6 @@ spec:
                                       type: string
                                   required:
                                   - volumeID
-                                  type: object
                                 azureDisk:
                                   description: AzureDisk represents an Azure Data
                                     Disk mount on the host and bind mount to the pod.
@@ -3010,7 +3508,6 @@ spec:
                                   required:
                                   - diskName
                                   - diskURI
-                                  type: object
                                 azureFile:
                                   description: AzureFile represents an Azure File
                                     Service mount on the host and bind mount to the
@@ -3031,7 +3528,6 @@ spec:
                                   required:
                                   - secretName
                                   - shareName
-                                  type: object
                                 cephfs:
                                   description: Represents a Ceph Filesystem mount
                                     that lasts the lifetime of a pod Cephfs volumes
@@ -3068,14 +3564,12 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     user:
                                       description: 'Optional: User is the rados user
                                         name, default is admin More info: https://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it'
                                       type: string
                                   required:
                                   - monitors
-                                  type: object
                                 cinder:
                                   description: Represents a cinder volume resource
                                     in Openstack. A Cinder volume must exist before
@@ -3104,14 +3598,12 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     volumeID:
                                       description: 'volume id used to identify the
                                         volume in cinder More info: https://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md'
                                       type: string
                                   required:
                                   - volumeID
-                                  type: object
                                 configMap:
                                   description: |-
                                     Adapts a ConfigMap into a volume.
@@ -3168,7 +3660,6 @@ spec:
                                         required:
                                         - key
                                         - path
-                                        type: object
                                       type: array
                                     name:
                                       description: 'Name of the referent. More info:
@@ -3178,7 +3669,6 @@ spec:
                                       description: Specify whether the ConfigMap or
                                         it's keys must be defined
                                       type: boolean
-                                  type: object
                                 downwardAPI:
                                   description: DownwardAPIVolumeSource represents
                                     a volume containing downward API info. Downward
@@ -3218,7 +3708,6 @@ spec:
                                                 type: string
                                             required:
                                             - fieldPath
-                                            type: object
                                           mode:
                                             description: 'Optional: mode bits to use
                                               on this file, must be a value between
@@ -3255,12 +3744,9 @@ spec:
                                                 type: string
                                             required:
                                             - resource
-                                            type: object
                                         required:
                                         - path
-                                        type: object
                                       type: array
-                                  type: object
                                 emptyDir:
                                   description: Represents an empty directory for a
                                     pod. Empty directory volumes support ownership
@@ -3275,7 +3761,6 @@ spec:
                                       type: string
                                     sizeLimit:
                                       type: string
-                                  type: object
                                 fc:
                                   description: Represents a Fibre Channel volume.
                                     Fibre Channel volumes can only be mounted as read/write
@@ -3311,7 +3796,6 @@ spec:
                                       items:
                                         type: string
                                       type: array
-                                  type: object
                                 flexVolume:
                                   description: FlexVolume represents a generic volume
                                     resource that is provisioned/attached using an
@@ -3348,10 +3832,8 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                   required:
                                   - driver
-                                  type: object
                                 flocker:
                                   description: Represents a Flocker volume mounted
                                     by the Flocker agent. One and only one of datasetName
@@ -3368,7 +3850,6 @@ spec:
                                       description: UUID of the dataset. This is unique
                                         identifier of a Flocker dataset
                                       type: string
-                                  type: object
                                 gcePersistentDisk:
                                   description: |-
                                     Represents a Persistent Disk resource in Google Compute Engine.
@@ -3405,7 +3886,6 @@ spec:
                                       type: boolean
                                   required:
                                   - pdName
-                                  type: object
                                 gitRepo:
                                   description: |-
                                     Represents a volume that is populated with the contents of a git repository. Git repo volumes do not support ownership management. Git repo volumes support SELinux relabeling.
@@ -3428,7 +3908,6 @@ spec:
                                       type: string
                                   required:
                                   - repository
-                                  type: object
                                 glusterfs:
                                   description: Represents a Glusterfs mount that lasts
                                     the lifetime of a pod. Glusterfs volumes do not
@@ -3451,7 +3930,6 @@ spec:
                                   required:
                                   - endpoints
                                   - path
-                                  type: object
                                 hostPath:
                                   description: Represents a host path mapped into
                                     a pod. Host path volumes do not support ownership
@@ -3468,7 +3946,6 @@ spec:
                                       type: string
                                   required:
                                   - path
-                                  type: object
                                 iscsi:
                                   description: Represents an ISCSI disk. ISCSI volumes
                                     can only be mounted as read/write once. ISCSI
@@ -3531,7 +4008,6 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     targetPortal:
                                       description: iSCSI Target Portal. The Portal
                                         is either an IP or ip_addr:port if the port
@@ -3542,7 +4018,6 @@ spec:
                                   - targetPortal
                                   - iqn
                                   - lun
-                                  type: object
                                 name:
                                   description: 'Volume''s name. Must be a DNS_LABEL
                                     and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
@@ -3568,7 +4043,6 @@ spec:
                                   required:
                                   - server
                                   - path
-                                  type: object
                                 persistentVolumeClaim:
                                   description: PersistentVolumeClaimVolumeSource references
                                     the user's PVC in the same namespace. This volume
@@ -3588,7 +4062,6 @@ spec:
                                       type: boolean
                                   required:
                                   - claimName
-                                  type: object
                                 photonPersistentDisk:
                                   description: Represents a Photon Controller persistent
                                     disk resource.
@@ -3605,7 +4078,6 @@ spec:
                                       type: string
                                   required:
                                   - pdID
-                                  type: object
                                 portworxVolume:
                                   description: PortworxVolumeSource represents a Portworx
                                     volume resource.
@@ -3628,7 +4100,6 @@ spec:
                                       type: string
                                   required:
                                   - volumeID
-                                  type: object
                                 projected:
                                   description: Represents a projected volume source
                                   properties:
@@ -3701,7 +4172,6 @@ spec:
                                                   required:
                                                   - key
                                                   - path
-                                                  type: object
                                                 type: array
                                               name:
                                                 description: 'Name of the referent.
@@ -3711,7 +4181,6 @@ spec:
                                                 description: Specify whether the ConfigMap
                                                   or it's keys must be defined
                                                 type: boolean
-                                            type: object
                                           downwardAPI:
                                             description: Represents downward API info
                                               for projecting into a projected volume.
@@ -3744,7 +4213,6 @@ spec:
                                                           type: string
                                                       required:
                                                       - fieldPath
-                                                      type: object
                                                     mode:
                                                       description: 'Optional: mode
                                                         bits to use on this file,
@@ -3787,12 +4255,9 @@ spec:
                                                           type: string
                                                       required:
                                                       - resource
-                                                      type: object
                                                   required:
                                                   - path
-                                                  type: object
                                                 type: array
-                                            type: object
                                           secret:
                                             description: |-
                                               Adapts a secret into a projected volume.
@@ -3846,7 +4311,6 @@ spec:
                                                   required:
                                                   - key
                                                   - path
-                                                  type: object
                                                 type: array
                                               name:
                                                 description: 'Name of the referent.
@@ -3856,7 +4320,6 @@ spec:
                                                 description: Specify whether the Secret
                                                   or its key must be defined
                                                 type: boolean
-                                            type: object
                                           serviceAccountToken:
                                             description: ServiceAccountTokenProjection
                                               represents a projected service account
@@ -3898,12 +4361,9 @@ spec:
                                                 type: string
                                             required:
                                             - path
-                                            type: object
-                                        type: object
                                       type: array
                                   required:
                                   - sources
-                                  type: object
                                 quobyte:
                                   description: Represents a Quobyte mount that lasts
                                     the lifetime of a pod. Quobyte volumes do not
@@ -3936,7 +4396,6 @@ spec:
                                   required:
                                   - registry
                                   - volume
-                                  type: object
                                 rbd:
                                   description: Represents a Rados Block Device mount
                                     that lasts the lifetime of a pod. RBD volumes
@@ -3983,7 +4442,6 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     user:
                                       description: 'The rados user name. Default is
                                         admin. More info: https://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it'
@@ -3991,7 +4449,6 @@ spec:
                                   required:
                                   - monitors
                                   - image
-                                  type: object
                                 scaleIO:
                                   description: ScaleIOVolumeSource represents a persistent
                                     ScaleIO volume
@@ -4024,7 +4481,6 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     sslEnabled:
                                       description: Flag to enable/disable SSL communication
                                         with Gateway, default false
@@ -4051,7 +4507,6 @@ spec:
                                   - gateway
                                   - system
                                   - secretRef
-                                  type: object
                                 secret:
                                   description: |-
                                     Adapts a Secret into a volume.
@@ -4108,7 +4563,6 @@ spec:
                                         required:
                                         - key
                                         - path
-                                        type: object
                                       type: array
                                     optional:
                                       description: Specify whether the Secret or it's
@@ -4118,7 +4572,6 @@ spec:
                                       description: 'Name of the secret in the pod''s
                                         namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
                                       type: string
-                                  type: object
                                 storageos:
                                   description: Represents a StorageOS persistent volume
                                     resource.
@@ -4143,7 +4596,6 @@ spec:
                                           description: 'Name of the referent. More
                                             info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                                           type: string
-                                      type: object
                                     volumeName:
                                       description: VolumeName is the human-readable
                                         name of the StorageOS volume.  Volume names
@@ -4161,7 +4613,6 @@ spec:
                                         within StorageOS. Namespaces that do not pre-exist
                                         within StorageOS will be created.
                                       type: string
-                                  type: object
                                 vsphereVolume:
                                   description: Represents a vSphere volume resource.
                                   properties:
@@ -4185,16 +4636,11 @@ spec:
                                       type: string
                                   required:
                                   - volumePath
-                                  type: object
                               required:
                               - name
-                              type: object
                             type: array
                         required:
                         - containers
-                        type: object
-                    type: object
-                type: object
               description: |-
                 A map of TFReplicaType (type) to ReplicaSpec (value). Specifies the TF cluster configuration. For example,
                   {
@@ -4211,10 +4657,7 @@ spec:
               type: integer
           required:
           - tfReplicaSpecs
-          type: object
-        status:
-          type: object
-      type: object
+        status: {}
   version: v1
 status:
   acceptedNames:
