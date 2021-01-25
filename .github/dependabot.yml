@@ -1,0 +1,154 @@
+updates:
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/golang.org/x/net/http2
+  open-pull-requests-limit: 10
+  package-ecosystem: docker
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: .
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/hashicorp/golang-lru
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/hashicorp/hcl
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/mitchellh/mapstructure
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/spf13/viper
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/spf13/cobra
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/spf13/afero
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/spf13/cast
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/spf13/jwalterweatherman
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/magiconair/properties
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/go-openapi/jsonpointer
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/go-openapi/jsonreference
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/go-openapi/spec
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/go-openapi/swag
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/konsorten/go-windows-terminal-sequences
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/github.com/sirupsen/logrus
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/golang.org/x/oauth2
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+- assignees:
+  - gaocegege
+  - carmark
+  directory: vendor/gopkg.in/yaml.v2
+  open-pull-requests-limit: 10
+  package-ecosystem: gomod
+  schedule:
+    interval: daily
+version: 2
